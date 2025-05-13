@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>經典遊戲合集 | 精美設計版</title>
+    <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #8e44ad;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --light: #ecf0f1;
+            --dark: #2c3e50;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            text-align: center;
+            padding: 2rem 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::after {
+            content: "";
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--accent), var(--warning));
+        }
+        
+        header h1 {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 3px 3px 0 rgba(0,0,0,0.2);
+        }
+        
+        header p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        .game-selector {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .game-btn {
+            padding: 12px 24px;
+            background: white;
+            color: var(--primary);
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+        
+        .game-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            z-index: -1;
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+        
+        .game-btn:hover {
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        
+        .game-btn:hover::before {
+            transform: scaleX(1);
+        }
+        
+        .game-btn.active {
+            color: white;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .game-btn.active:hover {
+            transform: none;
+            box-shadow: 0 4px 12px rgba(142, 68, 173, 0.3);
+        }
+        
+        .game-container {
+            background-color: white;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+            display: none;
+            animation: fadeIn 0.5s ease;
+            border: 1px solid rgba(0,0,0,0.05);
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .game-container.active {
+            display: block;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            font-size: 1.8rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: var(--dark);
+            color: white;
+            margin-top: 2rem;
+        }
+        
+        footer p {
+            opacity: 0.8;
+        }
+        
+        /* 猜數字遊戲樣式 */
+        #guess-number-game {
+            text-align: center;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        #guess-number-game p {
+            margin-bottom: 1rem;
+            font-size: 1.1rem;
+        }
+        
+        #guess-number-game input {
+            padding: 12px;
+            font-size: 1.1rem;
+            width: 120px;
+            text-align: center;
+            margin: 1rem 0;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: all 0.3s;
+        }
+        
+        #guess-number-game input:focus {
+            border-color: var(--secondary);
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.2);
+        }
+        
+        #guess-number-game button {
+            padding: 12px 24px;
+            background: linear-gradient(to right, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            margin: 0 8px;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        #guess-number-game button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        #guess-number-history {
+            margin-top: 2rem;
+            text-align: left;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.05);
+        }
+        
+        #guess-number-history p {
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+            color: var(--dark);
+        }
+        
+        #guess-list {
+            list-style: none;
+        }
+        
+        #guess-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        #guess-message {
+            margin: 1.5rem 0;
+            font-size: 1.2rem;
+            min-height: 1.5rem;
+            font-weight: bold;
+        }
+        
+        /* 貪吃蛇遊戲樣式 */
+        #snake-game {
+            text-align: center;
+        }
+        
+        #snake-canvas {
+            display: block;
+            margin: 0 auto;
+            border: 8px solid var(--primary);
+            border-radius: 8px;
+            background-color: #f8f9fa;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        #snake-controls {
+            text-align: center;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        #snake-score {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--primary);
+            margin: 1rem 0;
+        }
+        
+        #snake-gameover {
+            display: none;
+            text-align: center;
+            margin-top: 1.5rem;
+            background: rgba(231, 76, 60, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #snake-gameover h3 {
+            color: var(--accent);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 踩地雷遊戲樣式 */
+        #minesweeper-game {
+            text-align: center;
+        }
+        
+        #minesweeper-info {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 0 auto 1.5rem;
+            font-size: 1.2rem;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+        }
+        
+        #minesweeper-board {
+            display: grid;
+            grid-template-columns: repeat(10, 36px);
+            grid-gap: 4px;
+            background-color: var(--primary);
+            padding: 8px;
+            border-radius: 8px;
+            margin: 0 auto;
+            width: fit-content;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+        }
+        
+        #minesweeper-controls {
+            text-align: center;
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .cell {
+            width: 36px;
+            height: 36px;
+            background: linear-gradient(145deg, #ffffff, #e6e6e6);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-weight: bold;
+            cursor: pointer;
+            user-select: none;
+            border-radius: 4px;
+            box-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            transition: all 0.2s;
+        }
+        
+        .cell:hover {
+            transform: translateY(-2px);
+            box-shadow: 2px 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        .cell.revealed {
+            background: #f8f9fa;
+            box-shadow: inset 0 0 8px rgba(0,0,0,0.1);
+            transform: none;
+        }
+        
+        .cell.mine {
+            background: var(--accent);
+            color: white;
+        }
+        
+        .cell.flagged {
+            background: var(--warning);
+            color: white;
+        }
+        
+        .color-1 { color: #3498db; }
+        .color-2 { color: #2ecc71; }
+        .color-3 { color: #e74c3c; }
+        .color-4 { color: #9b59b6; }
+        .color-5 { color: #e67e22; }
+        .color-6 { color: #1abc9c; }
+        .color-7 { color: #34495e; }
+        .color-8 { color: #7f8c8d; }
+        
+        #minesweeper-gameover {
+            display: none;
+            text-align: center;
+            margin-top: 1.5rem;
+            background: rgba(46, 204, 113, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            max-width: 400px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        #minesweeper-gameover h3 {
+            color: var(--success);
+            margin-bottom: 0.5rem;
+        }
+        
+        /* 響應式設計 */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            #snake-canvas {
+                width: 100%;
+                height: auto;
+            }
+            
+            #minesweeper-board {
+                grid-template-columns: repeat(10, 30px);
+            }
+            
+            .cell {
+                width: 30px;
+                height: 30px;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.5rem;
+            }
+            
+            .game-btn {
+                padding: 10px 16px;
+                font-size: 0.9rem;
+            }
+            
+            #minesweeper-board {
+                grid-template-columns: repeat(10, 26px);
+            }
+            
+            .cell {
+                width: 26px;
+                height: 26px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>經典遊戲合集</h1>
+        <p>三款經典遊戲，無限樂趣</p>
+    </header>
+    
+    <div class="container">
+        <div class="game-selector">
+            <button class="game-btn active" data-game="guess-number">猜數字</button>
+            <button class="game-btn" data-game="snake">貪吃蛇</button>
+            <button class="game-btn" data-game="minesweeper">踩地雷</button>
+        </div>
+        
+        <!-- 猜數字遊戲 -->
+        <div id="guess-number-game" class="game-container active">
+            <h2>猜數字遊戲</h2>
+            <p>我已經想好了一個1-100之間的數字，你能猜出來嗎？</p>
+            <p>你已經猜了 <span id="guess-attempts">0</span> 次</p>
+            
+            <input type="number" id="guess-input" min="1" max="100" placeholder="輸入數字">
+            <button id="guess-submit">猜猜看</button>
+            <button id="guess-reset">重新開始</button>
+            
+            <div id="guess-message"></div>
+            
+            <div id="guess-number-history">
+                <p>猜測記錄：</p>
+                <ul id="guess-list"></ul>
+            </div>
+        </div>
+        
+        <!-- 貪吃蛇遊戲 -->
+        <div id="snake-game" class="game-container">
+            <h2>貪吃蛇遊戲</h2>
+            <canvas id="snake-canvas" width="400" height="400"></canvas>
+            <div id="snake-score">分數: 0</div>
+            <div id="snake-controls">
+                <button id="snake-start">開始遊戲</button>
+                <button id="snake-reset">重新開始</button>
+            </div>
+            <div id="snake-gameover">
+                <h3>遊戲結束!</h3>
+                <p id="snake-final-score">最終分數: 0</p>
+                <button id="snake-restart">再玩一次</button>
+            </div>
+        </div>
+        
+        <!-- 踩地雷遊戲 -->
+        <div id="minesweeper-game" class="game-container">
+            <h2>踩地雷遊戲</h2>
+            <div id="minesweeper-info">
+                <div>剩餘地雷: <span id="mine-count">10</span></div>
+                <div>旗子: <span id="flag-count">0</span></div>
+            </div>
+            <div id="minesweeper-board"></div>
+            <div id="minesweeper-controls">
+                <button id="minesweeper-new">新遊戲</button>
+                <button id="minesweeper-mode">當前模式: 揭開</button>
+            </div>
+            <div id="minesweeper-gameover">
+                <h3 id="minesweeper-result"></h3>
+                <button id="minesweeper-restart">再玩一次</button>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <p>© 2023 經典遊戲合集 | 精心設計的遊戲體驗</p>
+    </footer>
+
+    <script>
+        // 遊戲選擇器功能
+        document.querySelectorAll('.game-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.game-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.game-container').forEach(c => c.classList.remove('active'));
+                
+                btn.classList.add('active');
+                document.getElementById(`${btn.dataset.game}-game`).classList.add('active');
+                
+                // 切換到貪吃蛇遊戲時初始化畫布
+                if (btn.dataset.game === 'snake') {
+                    initSnakeCanvas();
+                }
+            });
+        });
+        
+        // ========== 猜數字遊戲 ==========
+        let targetNumber = Math.floor(Math.random() * 100) + 1;
+        let guessAttempts = 0;
+        
+        function initGuessNumberGame() {
+            targetNumber = Math.floor(Math.random() * 100) + 1;
+            guessAttempts = 0;
+            document.getElementById('guess-attempts').textContent = guessAttempts;
+            document.getElementById('guess-message').textContent = '';
+            document.getElementById('guess-message').style.color = '';
+            document.getElementById('guess-list').innerHTML = '';
+            document.getElementById('guess-input').disabled = false;
+            document.getElementById('guess-input').focus();
+        }
+        
+        function checkGuess() {
+            const guessInput = document.getElementById('guess-input');
+            const guess = parseInt(guessInput.value);
+            
+            if (isNaN(guess) || guess < 1 || guess > 100) {
+                document.getElementById('guess-message').textContent = '請輸入1-100之間的數字！';
+                document.getElementById('guess-message').style.color = 'var(--accent)';
+                return;
+            }
+            
+            guessAttempts++;
+            document.getElementById('guess-attempts').textContent = guessAttempts;
+            
+            const listItem = document.createElement('li');
+            
+            if (guess === targetNumber) {
+                document.getElementById('guess-message').textContent = `恭喜你！你猜對了！正確數字是 ${targetNumber}。`;
+                document.getElementById('guess-message').style.color = 'var(--success)';
+                listItem.textContent = `${guess} - 正確答案！`;
+                listItem.style.color = 'var(--success)';
+                guessInput.disabled = true;
+            } else if (guess < targetNumber) {
+                document.getElementById('guess-message').textContent = '太小了，再試一次！';
+                document.getElementById('guess-message').style.color = 'var(--secondary)';
+                listItem.textContent = `${guess} - 太小了`;
+                listItem.style.color = 'var(--secondary)';
+            } else {
+                document.getElementById('guess-message').textContent = '太大了，再試一次！';
+                document.getElementById('guess-message').style.color = 'var(--accent)';
+                listItem.textContent = `${guess} - 太大了`;
+                listItem.style.color = 'var(--accent)';
+            }
+            
+            document.getElementById('guess-list').appendChild(listItem);
+            guessInput.value = '';
+            guessInput.focus();
+        }
+        
+        document.getElementById('guess-submit').addEventListener('click', checkGuess);
+        document.getElementById('guess-reset').addEventListener('click', initGuessNumberGame);
+        document.getElementById('guess-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') checkGuess();
+        });
+        
+        // ========== 貪吃蛇遊戲 ==========
+        const snakeCanvas = document.getElementById('snake-canvas');
+        const snakeCtx = snakeCanvas.getContext('2d');
+        const GRID_SIZE = 20;
+        const TILE_COUNT = snakeCanvas.width / GRID_SIZE;
+        
+        let snake = [];
+        let snakeFood = {};
+        let snakeDirection = 'right';
+        let nextSnakeDirection = 'right';
+        let snakeScore = 0;
+        let snakeSpeed = 100;
+        let snakeGameLoop;
+        let snakeGameRunning = false;
+        
+        function initSnakeCanvas() {
+            // 確保畫布已正確初始化
+            snakeCanvas.width = 400;
+            snakeCanvas.height = 400;
+            snakeCtx.fillStyle = '#f8f9fa';
+            snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+        }
+        
+        function initSnakeGame() {
+            snake = [
+                {x: 5, y: 10},
+                {x: 4, y: 10},
+                {x: 3, y: 10}
+            ];
+            
+            snakeDirection = 'right';
+            nextSnakeDirection = 'right';
+            snakeScore = 0;
+            document.getElementById('snake-score').textContent = `分數: ${snakeScore}`;
+            
+            placeSnakeFood();
+            
+            if (snakeGameLoop) clearInterval(snakeGameLoop);
+            snakeGameRunning = true;
+            snakeGameLoop = setInterval(snakeGameStep, snakeSpeed);
+            
+            document.getElementById('snake-gameover').style.display = 'none';
+            drawSnakeGame();
+        }
+        
+        function placeSnakeFood() {
+            snakeFood = {
+                x: Math.floor(Math.random() * TILE_COUNT),
+                y: Math.floor(Math.random() * TILE_COUNT)
+            };
+            
+            for (let segment of snake) {
+                if (segment.x === snakeFood.x && segment.y === snakeFood.y) {
+                    return placeSnakeFood();
+                }
+            }
+        }
+        
+        function snakeGameStep() {
+            snakeDirection = nextSnakeDirection;
+            
+            const head = {x: snake[0].x, y: snake[0].y};
+            
+            switch (snakeDirection) {
+                case 'up': head.y--; break;
+                case 'down': head.y++; break;
+                case 'left': head.x--; break;
+                case 'right': head.x++; break;
+            }
+            
+            if (
+                head.x < 0 || head.x >= TILE_COUNT ||
+                head.y < 0 || head.y >= TILE_COUNT ||
+                checkSnakeCollision(head)
+            ) {
+                snakeGameOver();
+                return;
+            }
+            
+            snake.unshift(head);
+            
+            if (head.x === snakeFood.x && head.y === snakeFood.y) {
+                snakeScore++;
+                document.getElementById('snake-score').textContent = `分數: ${snakeScore}`;
+                
+                if (snakeScore % 5 === 0) {
+                    clearInterval(snakeGameLoop);
+                    snakeSpeed = Math.max(50, snakeSpeed - 10);
+                    snakeGameLoop = setInterval(snakeGameStep, snakeSpeed);
+                }
+                
+                placeSnakeFood();
+            } else {
+                snake.pop();
+            }
+            
+            drawSnakeGame();
+        }
+        
+        function checkSnakeCollision(head) {
+            for (let i = 0; i < snake.length; i++) {
+                if (snake[i].x === head.x && snake[i].y === head.y) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        
+        function drawSnakeGame() {
+            snakeCtx.fillStyle = '#f8f9fa';
+            snakeCtx.fillRect(0, 0, snakeCanvas.width, snakeCanvas.height);
+            
+            // 繪製網格線
+            snakeCtx.strokeStyle = '#e0e0e0';
+            snakeCtx.lineWidth = 0.5;
+            for (let i = 0; i < TILE_COUNT; i++) {
+                snakeCtx.beginPath();
+                snakeCtx.moveTo(i * GRID_SIZE, 0);
+                snakeCtx.lineTo(i * GRID_SIZE, snakeCanvas.height);
+                snakeCtx.stroke();
+                
+                snakeCtx.beginPath();
+                snakeCtx.moveTo(0, i * GRID_SIZE);
+                snakeCtx.lineTo(snakeCanvas.width, i * GRID_SIZE);
+                snakeCtx.stroke();
+            }
+            
+            // 繪製蛇
+            snake.forEach((segment, index) => {
+                const gradient = snakeCtx.createLinearGradient(
+                    segment.x * GRID_SIZE, 
+                    segment.y * GRID_SIZE, 
+                    (segment.x + 1) * GRID_SIZE, 
+                    (segment.y + 1) * GRID_SIZE
+                );
+                
+                if (index === 0) {
+                    // 蛇頭
+                    gradient.addColorStop(0, '#8e44ad');
+                    gradient.addColorStop(1, '#3498db');
+                } else {
+                    // 蛇身
+                    const colorValue = 200 - (index * 2);
+                    gradient.addColorStop(0, `rgb(46, 204, 113, ${Math.max(0.3, 1 - index * 0.02)})`);
+                    gradient.addColorStop(1, `rgb(39, 174, 96, ${Math.max(0.3, 1 - index * 0.02)})`);
+                }
+                
+                snakeCtx.fillStyle = gradient;
+                snakeCtx.fillRect(
+                    segment.x * GRID_SIZE, 
+                    segment.y * GRID_SIZE, 
+                    GRID_SIZE - 1, 
+                    GRID_SIZE - 1
+                );
+                
+                // 添加圓角
+                snakeCtx.beginPath();
+                snakeCtx.roundRect(
+                    segment.x * GRID_SIZE, 
+                    segment.y * GRID_SIZE, 
+                    GRID_SIZE - 1, 
+                    GRID_SIZE - 1, 
+                    4
+                );
+                snakeCtx.fill();
+            });
+            
+            // 繪製食物
+            const foodGradient = snakeCtx.createRadialGradient(
+                snakeFood.x * GRID_SIZE + GRID_SIZE/2,
+                snakeFood.y * GRID_SIZE + GRID_SIZE/2,
+                0,
+                snakeFood.x * GRID_SIZE + GRID_SIZE/2,
+                snakeFood.y * GRID_SIZE + GRID_SIZE/2,
+                GRID_SIZE/2
+            );
+            foodGradient.addColorStop(0, '#e74c3c');
+            foodGradient.addColorStop(1, '#c0392b');
+            
+            snakeCtx.fillStyle = foodGradient;
+            snakeCtx.beginPath();
+            snakeCtx.arc(
+                snakeFood.x * GRID_SIZE + GRID_SIZE/2,
+                snakeFood.y * GRID_SIZE + GRID_SIZE/2,
+                GRID_SIZE/2 - 2,
+                0,
+                Math.PI * 2
+            );
+            snakeCtx.fill();
+        }
+        
+        function snakeGameOver() {
+            clearInterval(snakeGameLoop);
+            snakeGameRunning = false;
+            
+            document.getElementById('snake-final-score').textContent = `最終分數: ${snakeScore}`;
+            document.getElementById('snake-gameover').style.display = 'block';
+        }
+        
+        document.addEventListener('keydown', function(e) {
+            if (!snakeGameRunning) return;
+            
+            switch (e.key) {
+                case 'ArrowUp': if (snakeDirection !== 'down') nextSnakeDirection = 'up'; break;
+                case 'ArrowDown': if (snakeDirection !== 'up') nextSnakeDirection = 'down'; break;
+                case 'ArrowLeft': if (snakeDirection !== 'right') nextSnakeDirection = 'left'; break;
+                case 'ArrowRight': if (snakeDirection !== 'left') nextSnakeDirection = 'right'; break;
+            }
+        });
+        
+        document.getElementById('snake-start').addEventListener('click', initSnakeGame);
+        document.getElementById('snake-reset').addEventListener('click', initSnakeGame);
+        document.getElementById('snake-restart').addEventListener('click', initSnakeGame);
+        
+        // ========== 踩地雷遊戲 ==========
+        const BOARD_SIZE = 10;
+        const MINE_COUNT = 10;
+        let minesweeperBoard = [];
+        let revealedCells = [];
+        let flaggedCells = [];
+        let minesweeperGameOver = false;
+        let flagMode = false;
+        
+        function initMinesweeperGame() {
+            minesweeperBoard = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(0));
+            revealedCells = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(false));
+            flaggedCells = Array(BOARD_SIZE).fill().map(() => Array(BOARD_SIZE).fill(false));
+            minesweeperGameOver = false;
+            flagMode = false;
+            document.getElementById('minesweeper-mode').textContent = '當前模式: 揭開';
+            
+            let minesPlaced = 0;
+            while (minesPlaced < MINE_COUNT) {
+                const x = Math.floor(Math.random() * BOARD_SIZE);
+                const y = Math.floor(Math.random() * BOARD_SIZE);
+                
+                if (minesweeperBoard[x][y] !== -1) {
+                    minesweeperBoard[x][y] = -1;
+                    minesPlaced++;
+                    
+                    for (let dx = -1; dx <= 1; dx++) {
+                        for (let dy = -1; dy <= 1; dy++) {
+                            const nx = x + dx;
+                            const ny = y + dy;
+                            
+                            if (nx >= 0 && nx < BOARD_SIZE && ny >= 0 && ny < BOARD_SIZE && minesweeperBoard[nx][ny] !== -1) {
+                                minesweeperBoard[nx][ny]++;
+                            }
+                        }
+                    }
+                }
+            }
+            
+            renderMinesweeperBoard();
+            updateMineCount();
+            document.getElementById('minesweeper-gameover').style.display = 'none';
+        }
+        
+        function renderMinesweeperBoard() {
+            const gameBoard = document.getElementById('minesweeper-board');
+            gameBoard.innerHTML = '';
+            
+            for (let x = 0; x < BOARD_SIZE; x++) {
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    const cell = document.createElement('div');
+                    cell.className = 'cell';
+                    cell.dataset.x = x;
+                    cell.dataset.y = y;
+                    
+                    if (revealedCells[x][y]) {
+                        cell.classList.add('revealed');
+                        if (minesweeperBoard[x][y] === -1) {
+                            cell.classList.add('mine');
+                            cell.innerHTML = '💣';
+                        } else if (minesweeperBoard[x][y] > 0) {
+                            cell.textContent = minesweeperBoard[x][y];
+                            cell.classList.add(`color-${minesweeperBoard[x][y]}`);
+                        }
+                    } else if (flaggedCells[x][y]) {
+                        cell.classList.add('flagged');
+                        cell.innerHTML = '🚩';
+                    }
+                    
+                    cell.addEventListener('click', () => handleMinesweeperClick(x, y));
+                    cell.addEventListener('contextmenu', (e) => {
+                        e.preventDefault();
+                        toggleFlag(x, y);
+                    });
+                    
+                    gameBoard.appendChild(cell);
+                }
+            }
+        }
+        
+        function handleMinesweeperClick(x, y) {
+            if (minesweeperGameOver || revealedCells[x][y]) return;
+            
+            if (flagMode) {
+                toggleFlag(x, y);
+                return;
+            }
+            
+            if (flaggedCells[x][y]) return;
+            
+            revealCell(x, y);
+            
+            if (minesweeperBoard[x][y] === -1) {
+                minesweeperGameOver = true;
+                revealAllMines();
+                document.getElementById('minesweeper-result').textContent = '遊戲結束！你踩到地雷了！';
+                document.getElementById('minesweeper-gameover').style.display = 'block';
+            } else if (minesweeperBoard[x][y] === 0) {
+                revealAdjacentCells(x, y);
+            }
+            
+            checkMinesweeperWin();
+        }
+        
+        function revealCell(x, y) {
+            revealedCells[x][y] = true;
+            renderMinesweeperBoard();
+        }
+        
+        function revealAdjacentCells(x, y) {
+            for (let dx = -1; dx <= 1; dx++) {
+                for (let dy = -1; dy <= 1; dy++) {
+                    const nx = x + dx;
+                    const ny = y + dy;
+                    
+                    if (nx >= 0 && nx < BOARD_SIZE && ny >= 0 && ny < BOARD_SIZE && !revealedCells[nx][ny] && !flaggedCells[nx][ny]) {
+                        revealCell(nx, ny);
+                        
+                        if (minesweeperBoard[nx][ny] === 0) {
+                            revealAdjacentCells(nx, ny);
+                        }
+                    }
+                }
+            }
+        }
+        
+        function toggleFlag(x, y) {
+            if (revealedCells[x][y] || minesweeperGameOver) return;
+            
+            flaggedCells[x][y] = !flaggedCells[x][y];
+            renderMinesweeperBoard();
+            updateMineCount();
+        }
+        
+        function revealAllMines() {
+            for (let x = 0; x < BOARD_SIZE; x++) {
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    if (minesweeperBoard[x][y] === -1) {
+                        revealedCells[x][y] = true;
+                    }
+                }
+            }
+            renderMinesweeperBoard();
+        }
+        
+        function updateMineCount() {
+            const flagsUsed = flaggedCells.flat().filter(Boolean).length;
+            document.getElementById('mine-count').textContent = MINE_COUNT - flagsUsed;
+            document.getElementById('flag-count').textContent = flagsUsed;
+        }
+        
+        function checkMinesweeperWin() {
+            let unrevealedSafeCells = 0;
+            
+            for (let x = 0; x < BOARD_SIZE; x++) {
+                for (let y = 0; y < BOARD_SIZE; y++) {
+                    if (!revealedCells[x][y] && minesweeperBoard[x][y] !== -1) {
+                        unrevealedSafeCells++;
+                    }
+                }
+            }
+            
+            if (unrevealedSafeCells === 0) {
+                minesweeperGameOver = true;
+                document.getElementById('minesweeper-result').textContent = '恭喜你贏了！';
+                document.getElementById('minesweeper-gameover').style.display = 'block';
+            }
+        }
+        
+        function toggleMinesweeperMode() {
+            flagMode = !flagMode;
+            document.getElementById('minesweeper-mode').textContent = `當前模式: ${flagMode ? '插旗' : '揭開'}`;
+        }
+        
+        document.getElementById('minesweeper-new').addEventListener('click', initMinesweeperGame);
+        document.getElementById('minesweeper-mode').addEventListener('click', toggleMinesweeperMode);
+        document.getElementById('minesweeper-restart').addEventListener('click', initMinesweeperGame);
+        
+        // 初始化所有遊戲
+        initGuessNumberGame();
+        initSnakeCanvas(); // 確保畫布初始化
+        initMinesweeperGame();
+    </script>
+</body>
+</html>
